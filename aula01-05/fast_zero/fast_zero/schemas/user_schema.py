@@ -1,21 +1,21 @@
 from pydantic import BaseModel, EmailStr
 
 
-class UserSchema(BaseModel):
+class UserRequest(BaseModel):
     username: str
-    email: EmailStr
     password: str
+    email: EmailStr
 
 
-class UserPublic(BaseModel):
+class UserResponse(BaseModel):
     id: int
     username: str
     email: EmailStr
 
 
-class UserEntity(UserSchema):
+class UserEntity(UserRequest):
     id: int
 
 
 class UserList(BaseModel):
-    users: list[UserPublic]
+    users: list[UserResponse]

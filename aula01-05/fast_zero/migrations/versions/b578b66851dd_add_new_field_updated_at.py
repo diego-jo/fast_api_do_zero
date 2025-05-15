@@ -1,8 +1,8 @@
-"""create updated_at field
+"""add new field updated_at
 
-Revision ID: 797c20333338
-Revises: 32da89323036
-Create Date: 2025-05-03 15:41:09.630771
+Revision ID: b578b66851dd
+Revises: c312ed15c3c6
+Create Date: 2025-05-13 09:10:50.158932
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '797c20333338'
-down_revision: Union[str, None] = '32da89323036'
+revision: str = 'b578b66851dd'
+down_revision: Union[str, None] = 'c312ed15c3c6'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

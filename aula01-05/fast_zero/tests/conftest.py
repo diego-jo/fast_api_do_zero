@@ -7,12 +7,30 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
 
 from fast_zero.app import app
-from fast_zero.models import table_registry
+from fast_zero.app import database as mocked_database
+from fast_zero.models.user_model import table_registry
+from fast_zero.schemas.user_schema import UserEntity
 
 
 @pytest.fixture
-def client():
-    return TestClient(app)
+def client(database):
+    return TestClient(app=app)
+
+
+@pytest.fixture
+def database():
+    mocked_database.clear()
+
+    user = UserEntity(
+        id=1,
+        username='diego',
+        password='1234',
+        email='diego@email.com',
+    )
+
+    mocked_database.append(user)
+    yield
+    mocked_database.clear()
 
 
 @pytest.fixture
@@ -27,15 +45,15 @@ def session():
 
 
 @contextmanager
-def _mock_db_time(*, model, created_time=datetime(2025, 1, 1),
-                  updated_time=datetime(2025, 1, 2)):
+def _mock_db_time(*, model, time=datetime(2025, 1, 1)):
     def fake_time_hook(mapper, connection, target):
-        if hasattr(target, 'created_at') and hasattr(target, 'updated_at'):
-            target.created_at = created_time
-            target.updated_at = updated_time
+        if hasattr(target, 'created_at'):
+            target.created_at = time
+        if hasattr(target, 'updated_at'):
+            target.updated_at = time
 
     event.listen(model, 'before_insert', fake_time_hook)
-    yield created_time, updated_time
+    yield time
     event.remove(model, 'before_insert', fake_time_hook)
 
 
