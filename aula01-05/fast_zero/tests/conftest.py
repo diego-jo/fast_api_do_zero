@@ -5,37 +5,43 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 from fast_zero.app import app
-from fast_zero.app import database as mocked_database
-from fast_zero.models.user_model import table_registry
-from fast_zero.schemas.user_schema import UserEntity
+from fast_zero.database import get_session
+from fast_zero.models.user_model import User, table_registry
 
 
 @pytest.fixture
-def client(database):
-    return TestClient(app=app)
+def client(session):
+    def get_session_override():
+        return session
+
+    with TestClient(app) as client:
+        app.dependency_overrides[get_session] = get_session_override
+        yield client
+
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture
-def database():
-    mocked_database.clear()
+def user(session):
+    user = User(username='diego', email='diego@email.com', password='123')
 
-    user = UserEntity(
-        id=1,
-        username='diego',
-        password='1234',
-        email='diego@email.com',
-    )
+    session.add(user)
+    session.commit()
+    session.refresh(user)
 
-    mocked_database.append(user)
-    yield
-    mocked_database.clear()
+    return user
 
 
 @pytest.fixture
 def session():
-    engine = create_engine('sqlite:///:memory:')
+    engine = create_engine(
+        'sqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool,
+    )
     table_registry.metadata.create_all(engine)
 
     with Session(engine) as session:

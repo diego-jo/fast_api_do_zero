@@ -38,6 +38,7 @@ select = ['I', 'F', 'E', 'W', 'PL', 'PT']
 preview = true
 quote-style = 'single'
 
+# ajustar para que os testes possam ser executados a partir de qualquer lugar
 [tool.pytest.ini_options]
 pythonpath = '.'
 addopts = '-p no:warnings'
