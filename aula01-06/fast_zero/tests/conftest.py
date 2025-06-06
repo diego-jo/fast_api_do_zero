@@ -26,11 +26,7 @@ def client(session):
 
 @pytest.fixture
 def user(session):
-    user = User(
-        username='diego',
-        email='diego@email.com',
-        password='21345'
-    )
+    user = User(username='diego', email='diego@email.com', password='21345')
 
     session.add(user)
     session.commit()
@@ -61,7 +57,6 @@ def mock_db_time():
 
 @contextmanager
 def _mock_db_time(*, model, time=datetime(2025, 6, 2)):
-
     def fake_time_hook(mapper, connection, target):
         if hasattr(target, 'created_at'):
             target.created_at = time

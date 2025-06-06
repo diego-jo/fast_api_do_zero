@@ -6,11 +6,7 @@ from fast_zero.models import User
 
 
 def test_create_user_db(session, mock_db_time):
-    user = User(
-        username='diego',
-        email='diego@email.com',
-        password='1234'
-    )
+    user = User(username='diego', email='diego@email.com', password='1234')
 
     with mock_db_time(model=User) as time:
         session.add(user)

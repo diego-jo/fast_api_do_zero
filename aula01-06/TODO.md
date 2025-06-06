@@ -32,12 +32,7 @@
   - aplicando migration
     - `alembic upgrade head` para migratin mais nova ou `alembic upgrade 'id migration'`
     para migration específica
+- [x] evoluir rotas para usar banco ao inves de lista
+- [x] evoluir testes para usar o banco de dados
 
-- [ ] evoluir rotas para usar banco ao inves de lista
-
-- [ ] evoluir testes para usar o banco de dados
-- [ ] evoluir testes
-- [ ] aula 06 mão na massa
-
-
-- [ ] descobrir como listar venvs no vscode como no windows
+- [ ] aula 06 autenticação e autorização mão na massa
