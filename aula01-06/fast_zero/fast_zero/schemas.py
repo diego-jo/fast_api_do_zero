@@ -17,3 +17,8 @@ class UserResponse(BaseModel):
 
 class ListUsers(BaseModel):
     users: list[UserResponse]
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
