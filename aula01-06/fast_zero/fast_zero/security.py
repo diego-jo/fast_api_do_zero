@@ -4,7 +4,8 @@ from zoneinfo import ZoneInfo
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from jwt import DecodeError, decode, encode
+from jwt import decode, encode
+from jwt.exceptions import DecodeError, ExpiredSignatureError
 from pwdlib import PasswordHash
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -58,6 +59,10 @@ def get_current_user(
 
     except DecodeError:
         raise credentials_exception
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=HTTPStatus.UNAUTHORIZED, detail='Expired token'
+        )
 
     user = session.scalar(select(User).where(User.email == sub_email))
 

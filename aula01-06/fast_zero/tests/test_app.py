@@ -1,7 +1,5 @@
 from http import HTTPStatus
 
-import pytest
-
 from fast_zero.schemas import UserResponse
 
 
@@ -104,20 +102,6 @@ def test_positive_update_user(client, user, token):
     }
 
 
-@pytest.mark.skip
-def test_update_user_not_found(client):
-    response = client.put(
-        '/users/45741',
-        json={
-            'username': 'diego jose',
-            'email': 'diego@email.com',
-            'password': '65+655345',
-        },
-    )
-
-    assert response.status_code == HTTPStatus.NOT_FOUND
-
-
 def test_update_user_without_username(client, token):
     response = client.put(
         '/users/1',
@@ -164,10 +148,10 @@ def test_positive_delete_user(client, user, token):
 # se consegui o token é pq o usuário existe, logo não deve retornar 404 e sim
 # 403 pq é o token de um usuário tentanto acessar o contexto de outro
 # faz sentido se existir o contexto de admin que tem uma visão geral
-@pytest.mark.skip
-def test_delete_user_not_found(client):
-    response = client.delete('/users/100')
-    assert response.status_code == HTTPStatus.NOT_FOUND
+# @pytest.mark.skip
+# def test_delete_user_not_found(client):
+#     response = client.delete('/users/100')
+#     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
 def test_positive_create_token(client, user):
