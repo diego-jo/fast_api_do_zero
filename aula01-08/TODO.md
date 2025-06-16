@@ -63,10 +63,14 @@
 
 - [x] definir rotas CRUD users
   - [x] implementar lógica de todas as rotas CRUD
-- [x] criar fixture client para add aos testes
+- [x] criar fixture client, token, session e mock_db_time para add aos testes
 - [x] criar testes unitarios crud
 
 - [x] instalar libs para autenticação/autorização
   - `poetry add pyjwt "pwdlib[argon2]"`
 
-- [ ] aula 08 tornar projeto assincrono mão na massa
+- [x] aula 08 tornar projeto assincrono mão na massa
+  - [x] instalar libs necessárias para execução assincrona
+    - `poetry add 'sqlalchemy[asyncio]' aiosqlite`
+    - `poetry add -D pytest-asyncio`
+

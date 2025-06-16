@@ -35,36 +35,41 @@ def test_create_jwt_token_successful():
     assert token_exp_time >= TOKEN_TIME
 
 
-def test_get_current_user(session, user, token):
-    current_user = get_current_user(session, token)
+@pytest.mark.asyncio
+async def test_get_current_user(session, user, token):
+    current_user = await get_current_user(session, token)
 
     assert current_user.id == user.id
 
 
-def test_get_current_user_with_invalid_token(session):
+@pytest.mark.asyncio
+async def test_get_current_user_with_invalid_token(session):
     with pytest.raises(HTTPException, match='not enough permissions'):
-        get_current_user(session, 'token')
+        await get_current_user(session, 'token')
 
 
-def test_get_current_user_without_sub(session):
+@pytest.mark.asyncio
+async def test_get_current_user_without_sub(session):
     token = create_jwt_token(data={'test': 'test'})
 
     with pytest.raises(HTTPException, match='not enough permissions'):
-        get_current_user(session, token)
+        await get_current_user(session, token)
 
 
-def test_get_current_user_with_expired_token(session, monkeypatch):
+@pytest.mark.asyncio
+async def test_get_current_user_with_expired_token(session, monkeypatch):
     monkeypatch.setattr(
         'fast_zero.security.auth.env.TOKEN_EXPIRATION_TIME_SECONDS', 0
     )
     token = create_jwt_token(data={'test': 'test'})
 
     with pytest.raises(HTTPException, match='expired token'):
-        get_current_user(session, token)
+        await get_current_user(session, token)
 
 
-def test_get_current_user_with_no_valid_user(session):
+@pytest.mark.asyncio
+async def test_get_current_user_with_no_valid_user(session):
     token = create_jwt_token(data={'sub': 'invalid_@email.com'})
 
     with pytest.raises(HTTPException, match='not enough permissions'):
-        get_current_user(session, token)
+        await get_current_user(session, token)

@@ -9,13 +9,13 @@ from jwt import decode, encode
 from jwt.exceptions import DecodeError, ExpiredSignatureError
 from pwdlib import PasswordHash
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from fast_zero.config.database import get_session
 from fast_zero.models.user import User
 from settings import Settings
 
-InjectedSession = Annotated[Session, Depends(get_session)]
+InjectedSession = Annotated[AsyncSession, Depends(get_session)]
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl='/auth/token')
 passwd_context = PasswordHash.recommended()
@@ -44,7 +44,7 @@ def create_jwt_token(data: dict):
 # TODO: centralizar lançamento de exceções do tipo HTTP em um handler??!!!
 # para evitar qem em todo lugar no código tenham espalhadas chamadas a classe
 # HTTPException do fastapi.
-def get_current_user(
+async def get_current_user(
     session: InjectedSession, token: str = Depends(oauth2_schema)
 ):
     forbiden_exception = HTTPException(
@@ -67,7 +67,7 @@ def get_current_user(
             status_code=HTTPStatus.UNAUTHORIZED, detail='expired token'
         )
 
-    db_user = session.scalar(select(User).where(User.email == email))
+    db_user = await session.scalar(select(User).where(User.email == email))
 
     if not db_user:
         raise forbiden_exception
