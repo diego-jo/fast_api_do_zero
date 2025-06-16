@@ -47,7 +47,6 @@ def create_jwt_token(data: dict):
 async def get_current_user(
     session: InjectedSession, token: str = Depends(oauth2_schema)
 ):
-
     credentials_exception = HTTPException(
         status_code=HTTPStatus.UNAUTHORIZED,
         detail='Could not validate credentials',

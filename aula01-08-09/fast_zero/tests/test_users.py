@@ -21,7 +21,17 @@ def test_create_user_successful(client):
     }
 
 
-def test_create_user_with_already_in_use_username(client, user):
+# TODO: alterar para usar fixture de criação de usuário fixo
+def test_create_user_with_already_in_use_username(client):
+    client.post(
+        '/users',
+        json={
+            'username': 'diego',
+            'email': 'djol@email.com',
+            'password': '123',
+        },
+    )
+
     response = client.post(
         '/users',
         json={
@@ -35,7 +45,17 @@ def test_create_user_with_already_in_use_username(client, user):
     assert response.json() == {'detail': 'username or email already in use'}
 
 
-def test_create_user_with_already_in_use_email(client, user):
+# TODO: alterar para usar fixture de criação de usuário fixo
+def test_create_user_with_already_in_use_email(client):
+    client.post(
+        '/users',
+        json={
+            'username': 'a234sdfs',
+            'email': 'diego@email.com',
+            'password': '123',
+        },
+    )
+
     response = client.post(
         '/users',
         json={
@@ -49,7 +69,7 @@ def test_create_user_with_already_in_use_email(client, user):
     assert response.json() == {'detail': 'username or email already in use'}
 
 
-def test_create_user_with_no_email(client, user):
+def test_create_user_with_no_email(client):
     response = client.post(
         '/users',
         json={
@@ -76,26 +96,8 @@ def test_get_all_users_with_query_filters(client, user):
     assert len(response.json().get('users')) == 1
 
 
-def test_get_all_users_with_query_filter_limit(client, user):
+def test_get_all_users_with_query_filter_limit(client, user, other_user):
     USERS_NUMBER = 2
-
-    client.post(
-        '/users',
-        json={
-            'username': 'jose',
-            'email': 'jose@email.com',
-            'password': '123',
-        },
-    )
-    client.post(
-        '/users',
-        json={
-            'username': 'fulano',
-            'email': 'fulano@email.com',
-            'password': '123',
-        },
-    )
-
     response = client.get('/users', params={'offset': 0, 'limit': 2})
 
     assert response.status_code == HTTPStatus.OK
@@ -135,12 +137,13 @@ def test_update_user(client, user, token):
     }
 
 
+# TODO: alterar para usar fixture de criação de usuário fixo
 def test_update_user_with_already_in_use_username(client, user, token):
     client.post(
         '/users',
         json={
-            'username': 'jose',
-            'email': 'jose@email.com',
+            'username': 'a234sdfs',
+            'email': 'diego@email.com',
             'password': '123',
         },
     )
@@ -148,7 +151,7 @@ def test_update_user_with_already_in_use_username(client, user, token):
     response = client.put(
         f'/users/{user.id}',
         json={
-            'username': 'jose',
+            'username': 'a234sdfs',
             'email': 'diego@email.com',
             'password': '123',
         },
@@ -159,9 +162,9 @@ def test_update_user_with_already_in_use_username(client, user, token):
     assert response.json() == {'detail': 'username or email already in use'}
 
 
-def test_update_user_with_no_permissions(client, user, token):
+def test_update_user_with_wrong_user(client, other_user, token):
     response = client.put(
-        '/users/23',
+        f'/users/{other_user.id}',
         json={
             'username': 'jose',
             'email': 'jose@email.com',
@@ -185,9 +188,9 @@ def test_delete_user(client, user, token):
     assert get_response.status_code == HTTPStatus.NOT_FOUND
 
 
-def test_delete_user_with_no_permissions(client, user, token):
+def test_delete_user_with_wrong_user(client, other_user, token):
     response = client.delete(
-        '/users/23',
+        f'/users/{other_user.id}',
         headers={'Authorization': f'Bearer {token}'},
     )
 

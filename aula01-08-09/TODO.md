@@ -73,3 +73,8 @@
   - [x] instalar libs necessárias para execução assincrona
     - `poetry add 'sqlalchemy[asyncio]' aiosqlite`
     - `poetry add -D pytest-asyncio`
+
+
+- [ ] atualizações da aula 09
+  - [ ] instala das libs factory-boy e freezegun
+    - `poetry add -D factory-boy freezegun`

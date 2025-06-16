@@ -29,6 +29,8 @@ taskipy = "^1.14.1"
 pytest-cov = "^6.2.1"
 ipdb = "^0.13.13"
 pytest-asyncio = "^1.0.0"
+factory-boy = "^3.3.3"
+freezegun = "^1.5.2"
 
 [tool.coverage.run]
 concurrency = ['thread', 'greenlet']

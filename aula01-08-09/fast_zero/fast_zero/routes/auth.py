@@ -9,12 +9,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fast_zero.config.database import get_session
 from fast_zero.models.user import User
 from fast_zero.schemas.security import Token
-from fast_zero.security.auth import create_jwt_token, verify_password
+from fast_zero.security.auth import (
+    create_jwt_token,
+    get_current_user,
+    verify_password,
+)
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 
 OAuth2Form = Annotated[OAuth2PasswordRequestForm, Depends()]
 InjectedSession = Annotated[AsyncSession, Depends(get_session)]
+CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @router.post('/token', status_code=HTTPStatus.OK, response_model=Token)
@@ -32,3 +37,10 @@ async def login(form_data: OAuth2Form, session: InjectedSession):
     token = create_jwt_token(data={'sub': form_data.username})
 
     return Token(access_token=token, token_type='Bearer')
+
+
+@router.post('/refresh_token', status_code=HTTPStatus.OK, response_model=Token)
+def refresh_token(user: CurrentUser):
+    new_token = create_jwt_token({'sub': user.email})
+
+    return Token(access_token=new_token, token_type='Bearer')

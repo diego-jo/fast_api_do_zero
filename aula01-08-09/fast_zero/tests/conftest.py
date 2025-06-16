@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from datetime import datetime
 
+import factory
 import pytest
 import pytest_asyncio
 from fastapi.testclient import TestClient
@@ -12,6 +13,15 @@ from fast_zero.config.database import get_session
 from fast_zero.models.tables import table_registry
 from fast_zero.models.user import User
 from fast_zero.security.auth import hash_password
+
+
+class UserFactory(factory.Factory):
+    class Meta:
+        model = User
+
+    username = factory.Sequence(lambda n: f'test{n}')
+    email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
+    password = factory.LazyAttribute(lambda obj: f'{obj.username}@pass.com')
 
 
 @pytest.fixture
@@ -47,11 +57,21 @@ async def session():
 @pytest_asyncio.fixture
 async def user(session):
     passwd = '123'
-    user = User(
-        username='diego',
-        email='diego@email.com',
-        password=hash_password(passwd),
-    )
+    user = UserFactory(password=hash_password(passwd))
+
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+
+    user.plain_password = passwd
+
+    return user
+
+
+@pytest_asyncio.fixture
+async def other_user(session):
+    passwd = '123'
+    user = UserFactory(password=hash_password(passwd))
 
     session.add(user)
     await session.commit()
