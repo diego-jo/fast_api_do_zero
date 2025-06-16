@@ -73,4 +73,3 @@
   - [x] instalar libs necessárias para execução assincrona
     - `poetry add 'sqlalchemy[asyncio]' aiosqlite`
     - `poetry add -D pytest-asyncio`
-

@@ -63,7 +63,7 @@ async def test_get_current_user_with_expired_token(session, monkeypatch):
     )
     token = create_jwt_token(data={'test': 'test'})
 
-    with pytest.raises(HTTPException, match='expired token'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         await get_current_user(session, token)
 
 
