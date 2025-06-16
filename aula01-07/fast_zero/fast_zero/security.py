@@ -42,8 +42,10 @@ def get_current_user(
     token: str = Depends(oauth2_scheme),
     session: Session = Depends(get_session),
 ):
-    forbiden_exception = HTTPException(
-        status_code=HTTPStatus.FORBIDDEN, detail='not enough permissions'
+    credentials_exception = HTTPException(
+        status_code=HTTPStatus.UNAUTHORIZED,
+        detail='Could not validate credentials',
+        headers={'WWW-Authenticate': 'Bearer'},
     )
 
     try:
@@ -53,10 +55,10 @@ def get_current_user(
         email = decoded_token.get('sub')
 
         if not email:
-            raise forbiden_exception
+            raise credentials_exception
 
     except DecodeError:
-        raise forbiden_exception
+        raise credentials_exception
     except ExpiredSignatureError:
         raise HTTPException(
             status_code=HTTPStatus.UNAUTHORIZED, detail='Expired token'
@@ -65,6 +67,6 @@ def get_current_user(
     user = session.scalar(select(User).where(User.email == email))
 
     if not user:
-        raise forbiden_exception
+        raise credentials_exception
 
     return user

@@ -27,13 +27,13 @@ def test_positive_get_current_user(session, user):
 
 
 def test_get_current_user_invalid_token():
-    with pytest.raises(HTTPException, match='not enough permissions'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         get_current_user(token='invalid_token')
 
 
 def test_get_current_user_without_sub_in_token():
     token = create_jwt_token(data={'un_sub': 'sem_sub'})
-    with pytest.raises(HTTPException, match='not enough permissions'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         get_current_user(token=token)
 
 
@@ -49,7 +49,7 @@ def test_get_current_user_expired_token(monkeypatch):
 
 def test_get_current_user_not_found(session):
     token = create_jwt_token(data={'sub': 'unknown'})
-    with pytest.raises(HTTPException, match='not enough permissions'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         get_current_user(token, session)
 
 
