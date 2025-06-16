@@ -44,7 +44,7 @@ async def test_get_current_user(session, user, token):
 
 @pytest.mark.asyncio
 async def test_get_current_user_with_invalid_token(session):
-    with pytest.raises(HTTPException, match='not enough permissions'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         await get_current_user(session, 'token')
 
 
@@ -52,7 +52,7 @@ async def test_get_current_user_with_invalid_token(session):
 async def test_get_current_user_without_sub(session):
     token = create_jwt_token(data={'test': 'test'})
 
-    with pytest.raises(HTTPException, match='not enough permissions'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         await get_current_user(session, token)
 
 
@@ -71,5 +71,5 @@ async def test_get_current_user_with_expired_token(session, monkeypatch):
 async def test_get_current_user_with_no_valid_user(session):
     token = create_jwt_token(data={'sub': 'invalid_@email.com'})
 
-    with pytest.raises(HTTPException, match='not enough permissions'):
+    with pytest.raises(HTTPException, match='Could not validate credentials'):
         await get_current_user(session, token)

@@ -47,8 +47,11 @@ def create_jwt_token(data: dict):
 async def get_current_user(
     session: InjectedSession, token: str = Depends(oauth2_schema)
 ):
-    forbiden_exception = HTTPException(
-        status_code=HTTPStatus.FORBIDDEN, detail='not enough permissions'
+
+    credentials_exception = HTTPException(
+        status_code=HTTPStatus.UNAUTHORIZED,
+        detail='Could not validate credentials',
+        headers={'WWW-Authenticate': 'Bearer'},
     )
 
     try:
@@ -58,10 +61,10 @@ async def get_current_user(
         email = decoded_token.get('sub')
 
         if not email:
-            raise forbiden_exception
+            raise credentials_exception
 
     except DecodeError:
-        raise forbiden_exception
+        raise credentials_exception
     except ExpiredSignatureError:
         raise HTTPException(
             status_code=HTTPStatus.UNAUTHORIZED, detail='expired token'
@@ -70,6 +73,6 @@ async def get_current_user(
     db_user = await session.scalar(select(User).where(User.email == email))
 
     if not db_user:
-        raise forbiden_exception
+        raise credentials_exception
 
     return db_user
