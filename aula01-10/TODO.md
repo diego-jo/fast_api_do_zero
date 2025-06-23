@@ -1,4 +1,4 @@
-- [x] leitura inicial aula 08
+- [x] leitura inicial aula 10
 - [x] setar ambiente de desenvolvimento
     - instalar:
         - pipx: `pip install --user pipx` | `sudo apt install pipx`
@@ -12,7 +12,9 @@
         - `poetry new --flat fast_zero`
         - setar versão python do projeto: `poetry env use 3.13`
           - alterar pyproject.toml: `requires-python = ">=3.13, <4.0"`
-        - `poetry add -D pytest pytest-cov ruff taskipy`
+        - `poetry add -D pytest pytest-asyncio pytest-cov ruff taskipy`
+          - [x] instala das libs factory-boy e freezegun
+        - `poetry add -D factory-boy freezegun`
         - configurar pyproject.toml
           - pytest
           - taskipy
@@ -20,9 +22,8 @@
         - instalar fastapi: `poetry install` && `poetry add 'fastapi[standard]`
 
 
-- [x] instalar dependencias banco de dados
-  - [x] instalar:
-    - `poetry add sqlalchemy alembic pydantic-settings`
+- [x] instalar dependencias banco de dados já assincrono
+    - `poetry add 'sqlalchemy[asyncio]' aiosqlite alembic pydantic-settings`
 
 - [x] configurar gerenciador de variaveis de ambiente `settings.py`
 
@@ -34,44 +35,41 @@
 - [x] configurar gerenciador de migrations
   - [x] iniciar controle de migrations com alembic
     - `alembic init migrations`
-    - configurar arquivo `migrations/env.py` com dados da base e models
+    - [x] configurar arquivo `migrations/env.py` com dados da base e models async
+      - quebrar função `run_migrations_online` em 3 partes:
+        - `run_migrations_online` -> iniciar execucao com `asyncio.run`
+        - `do_run_migrations` -> recebe `connection` e executa migrations
+        - `run_async_migrations` -> cria conexão assincrona e executa função sincrona de migrations
+
   - [x] gerar migrations
     - `alembic revision --autogenerate -m "create users table"`
   - [x] aplicando migration
     - `alembic upgrade head` para migratin mais nova ou `alembic upgrade 'id migration'`
     para migration específica
   - [x] criar config com função `get_session`
+  - [x] criar teste de persistencia para validar DB
 
 
-- [x] criar feature de autenticação/autorização
+- [ ] criar feature de autenticação/autorização
+  - [x] instalar libs para autenticação/autorização
+    - `poetry add pyjwt "pwdlib[argon2]"`
   - [x] criar modulo `security` com as funcionalidades abaixo:
     - [x] encripta password
     - [x] valida password
     - [x] gera encoded token
-    - [ ] funcao de extrair/validar informações token
+    - [x] funcao de extrair/validar informações token
+    - [x] criar testes para funções do modulo `security.py`
   - [x] criar rota para gerar token
       - [x] implementar lógica da rota /token
-    - [x] criar testes para rota /token e funções do modulo `security.py`
-    - [x] alterar rotas create e update user para criptografar password antes de salvar
-- [x] proteger rotas de PUT e DELETE
-- [ ] evoluir testes para autenticação/autorização
-  - [x] criar fixture de geração de token
-  - [x] alterar testes para receber token
+    - [x] criar testes para rota /token
+  - [ ] criar rota para refresh token
+    - [ ] criar testes para rota refresh token
 
 - [x] definir rotas CRUD users
-  - [x] implementar lógica de todas as rotas CRUD
-- [x] criar fixture client, token, session e mock_db_time para add aos testes
+- [x] proteger rotas de PUT, DELETE e GET by id
+- [x] implementar lógica de todas as rotas CRUD considerando autenticação e autorização
+- [x] criar fixture client, token para add aos testes
 - [x] criar testes unitarios crud
 
-- [x] instalar libs para autenticação/autorização
-  - `poetry add pyjwt "pwdlib[argon2]"`
 
-- [x] aula 08 tornar projeto assincrono mão na massa
-  - [x] instalar libs necessárias para execução assincrona
-    - `poetry add 'sqlalchemy[asyncio]' aiosqlite`
-    - `poetry add -D pytest-asyncio`
-
-
-- [ ] atualizações da aula 09
-  - [ ] instala das libs factory-boy e freezegun
-    - `poetry add -D factory-boy freezegun`
+- [ ] aula 10 mão na massa
