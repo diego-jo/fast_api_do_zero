@@ -50,7 +50,7 @@
   - [x] criar teste de persistencia para validar DB
 
 
-- [ ] criar feature de autenticação/autorização
+- [x] criar feature de autenticação/autorização
   - [x] instalar libs para autenticação/autorização
     - `poetry add pyjwt "pwdlib[argon2]"`
   - [x] criar modulo `security` com as funcionalidades abaixo:
@@ -62,8 +62,8 @@
   - [x] criar rota para gerar token
       - [x] implementar lógica da rota /token
     - [x] criar testes para rota /token
-  - [ ] criar rota para refresh token
-    - [ ] criar testes para rota refresh token
+  - [x] criar rota para refresh token
+    - [x] criar testes para rota refresh token
 
 - [x] definir rotas CRUD users
 - [x] proteger rotas de PUT, DELETE e GET by id
@@ -72,4 +72,12 @@
 - [x] criar testes unitarios crud
 
 
-- [ ] aula 10 mão na massa
+- [x] aula 10 mão na massa
+  - [x] definir schemas e models com relacionamentos
+    - [x] criar e aplicar migration para tabela de `todo`
+  - [x] criar rota para CRUD de tarefas
+    - [x] criar testes para todas as operações de tarefas
+
+
+
+- NOTA: INCLUIR TODOS PARA A AULA 11

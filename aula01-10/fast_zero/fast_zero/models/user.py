@@ -2,9 +2,10 @@ from datetime import datetime
 
 from pwdlib import PasswordHash
 from sqlalchemy import func
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from fast_zero.models.tables import table_registry
+from fast_zero.models.todo import Todo
 
 passwd_context = PasswordHash.recommended()
 
@@ -25,6 +26,9 @@ class User:
         init=False,
         server_default=func.now(),
         onupdate=func.now(),
+    )
+    todos: Mapped[list['Todo']] = relationship(
+        init=False, cascade='all, delete-orphan', lazy='selectin'
     )
 
     # TODO: validar tamanho minimo e complexidade do passwd
