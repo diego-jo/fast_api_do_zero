@@ -73,9 +73,9 @@
 
 
 - [x] aula 10 mão na massa
-  - [x] definir schemas e models com relacionamentos
-    - [x] criar e aplicar migration para tabela de `todo`
-  - [x] criar rota para CRUD de tarefas
+  - [x] definir schemas e models TODOs com relacionamentos
+    - [x] criar e aplicar migration para tabela de `todos`
+  - [x] criar rota para CRUD de `todos`
     - [x] criar testes para todas as operações de tarefas
 
 
