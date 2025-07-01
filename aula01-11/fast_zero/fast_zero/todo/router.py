@@ -14,6 +14,7 @@ from fast_zero.todo.schemas import (
     TodoList,
     TodoRequest,
     TodoResponse,
+    TodoUpdate,
 )
 from fast_zero.user.models import User
 
@@ -67,12 +68,26 @@ async def list_todos(filter: Filter, user: CurrentUser, session: Session):
 @router.patch(
         '/{todo_id}', status_code=HTTPStatus.OK, response_model=TodoResponse
 )
-async def update_todo(todo_id: int):
-    if not todo_id:
+async def update_todo(
+    todo_id: int, todo: TodoUpdate, user: CurrentUser, session: Session
+):
+    db_todo = session.scalar(
+        select(Todo).where(Todo.id == todo_id, Todo.user_id == user.id)
+    )
+
+    if not db_todo:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='todo not found'
         )
+
+    for key, value in todo.model_dump(exclude_unset=True).items():
+        setattr(db_todo, key, value)
+
+    session.commit()
+    await session.refresh(db_todo)
+
+    return db_todo
 
 
 @router.patch('/{todo_id}', status_code=HTTPStatus.NO_CONTENT)

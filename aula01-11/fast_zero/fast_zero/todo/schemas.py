@@ -18,6 +18,12 @@ class TodoRequest(BaseModel):
     state: TodoState
 
 
+class TodoUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    state: TodoState | None = None
+
+
 class TodoResponse(TodoRequest):
     id: int
     created_at: datetime = Field(alias='createdAt')
