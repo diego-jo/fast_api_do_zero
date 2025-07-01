@@ -86,6 +86,7 @@ def test_refresh_token(client, token):
     assert 'access_token' in data
     assert 'token_type' in data
     assert data['token_type'] == 'Bearer'
+    assert data['access_token'] != token
 
 
 def test_refresh_token_with_expired_token(client, user):
