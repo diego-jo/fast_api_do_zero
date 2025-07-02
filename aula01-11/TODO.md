@@ -52,7 +52,7 @@
   - [x] criar teste de persistencia para validar DB
 
 
-- [ ] criar feature de autenticação/autorização
+- [x] criar feature de autenticação/autorização
   - [x] instalar libs para autenticação/autorização
     - `poetry add pyjwt "pwdlib[argon2]"`
   - [x] criar modulo `security` com as funcionalidades abaixo:
