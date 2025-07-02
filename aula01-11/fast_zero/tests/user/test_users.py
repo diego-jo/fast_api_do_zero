@@ -13,7 +13,7 @@ def test_create_user(client):
             'username': 'diego',
             'email': 'diego@email.com',
             'password': '123@asd',
-        }
+        },
     )
 
     assert response.status_code == HTTPStatus.CREATED
@@ -21,7 +21,7 @@ def test_create_user(client):
         'id': 1,
         'username': 'diego',
         'email': 'diego@email.com',
-        'todos': []
+        'todos': [],
     }
 
 
@@ -32,7 +32,7 @@ def test_create_user_with_already_in_use_username(client, user):
             'username': user.username,
             'email': 'diego@imail.com',
             'password': '123@asd',
-        }
+        },
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
@@ -46,7 +46,7 @@ def test_create_user_with_already_in_use_email(client, user):
             'username': 'any_username',
             'email': user.email,
             'password': '123@asd',
-        }
+        },
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
@@ -69,10 +69,7 @@ async def test_list_users_with_offset_filter(client, session):
     session.add_all(users)
     await session.commit()
 
-    response = client.get(
-        '/users',
-        params={'offset': 5}
-    )
+    response = client.get('/users', params={'offset': 5})
 
     assert response.status_code == HTTPStatus.OK
     assert len(response.json().get('users')) == expected_users
@@ -86,10 +83,7 @@ async def test_list_users_with_limit_filter(client, session):
     session.add_all(users)
     await session.commit()
 
-    response = client.get(
-        '/users',
-        params={'limit': 3}
-    )
+    response = client.get('/users', params={'limit': 3})
 
     assert response.status_code == HTTPStatus.OK
     assert len(response.json().get('users')) == expected_users
@@ -103,10 +97,7 @@ async def test_list_users_with_offset_and_limit_filter(client, session):
     session.add_all(users)
     await session.commit()
 
-    response = client.get(
-        '/users',
-        params={'offset': 6, 'limit': 2}
-    )
+    response = client.get('/users', params={'offset': 6, 'limit': 2})
 
     assert response.status_code == HTTPStatus.OK
     assert len(response.json().get('users')) == expected_users
@@ -147,10 +138,10 @@ def test_update_user(client, user, token):
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-            'id': user.id,
-            'username': 'updated_user',
-            'email': 'updated_user@email.com',
-        }
+        'id': user.id,
+        'username': 'updated_user',
+        'email': 'updated_user@email.com',
+    }
 
 
 def test_update_user_with_no_permissions(client, token):

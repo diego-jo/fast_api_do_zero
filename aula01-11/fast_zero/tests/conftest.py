@@ -109,3 +109,13 @@ def token(client, user):
     )
 
     return response.json()['access_token']
+
+
+@pytest_asyncio.fixture
+async def todo(session, user):
+    todo = TodoFactory(user_id=user.id, state='todo')
+    session.add(todo)
+    await session.commit()
+    await session.refresh(todo)
+
+    return todo
