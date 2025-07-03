@@ -2,6 +2,7 @@ from dataclasses import asdict
 
 import pytest
 from sqlalchemy import select
+from sqlalchemy.exc import DataError
 
 from fast_zero.todo.models import Todo
 from fast_zero.user.models import User
@@ -71,12 +72,9 @@ async def test_create_todo_with_invalid_state(session, user):
     )
 
     session.add(todo)
-    await session.commit()
 
-    error_message = f"'{todo.state}' is not among the defined enum values."
-
-    with pytest.raises(LookupError, match=error_message):
-        await session.scalar(select(Todo).where(Todo.id == todo.id))
+    with pytest.raises(DataError):
+        await session.commit()
 
 
 @pytest.mark.asyncio

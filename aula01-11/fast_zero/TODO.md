@@ -77,7 +77,14 @@
 - [x] definir rotas CRUD `todos`
 - [x] implementar lógica de todas as rotas CRUD considerando autorização
 - [x] criar fixtures necessárias para os testes
-- [ ] criar testes para todas as operações de tarefas
+- [x] criar testes para todas as operações de tarefas
 
 
-- [ ] aula 11 docker e postgresql mão na massa
+- [x] aula 11 docker e postgresql mão na massa
+  - [x] instalar psycopg
+    - `poetry add 'psycopg[binary]'`
+    - alterar string de conexão do banco para postgresl
+    - instalar testcontainers
+      - `poetry add -D testcontainers`
+    - alterar testes para executar com testcontainers
+    - separar criação de `engine` da `session` e mudar fixture da engine para escopo de sessao

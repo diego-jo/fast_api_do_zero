@@ -75,7 +75,7 @@ async def test_list_todos_with_offset_and_limit_filters(
     response = client.get(
         '/todos',
         headers={'Authorization': f'Bearer {token}'},
-        params={'offset': 7, 'limit': 10}
+        params={'offset': 7, 'limit': 10},
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -96,7 +96,7 @@ async def test_list_todos_with_title_filter(client, token, user, session):
     response = client.get(
         '/todos',
         headers={'Authorization': f'Bearer {token}'},
-        params={'title': 'pyt'}
+        params={'title': 'pyt'},
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -119,7 +119,7 @@ async def test_list_todos_with_description_filter(
     response = client.get(
         '/todos',
         headers={'Authorization': f'Bearer {token}'},
-        params={'description': 'tarefa'}
+        params={'description': 'tarefa'},
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -127,9 +127,7 @@ async def test_list_todos_with_description_filter(
 
 
 @pytest.mark.asyncio
-async def test_list_todos_with_state_filter(
-    client, token, user, session
-):
+async def test_list_todos_with_state_filter(client, token, user, session):
     expected_value = 5
     session.add_all(TodoFactory.create_batch(3, user_id=user.id, state='todo'))
     session.add_all(
@@ -142,7 +140,7 @@ async def test_list_todos_with_state_filter(
     response = client.get(
         '/todos',
         headers={'Authorization': f'Bearer {token}'},
-        params={'state': 'doing'}
+        params={'state': 'doing'},
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -150,9 +148,7 @@ async def test_list_todos_with_state_filter(
 
 
 @pytest.mark.asyncio
-async def test_list_todos_with_all_filters(
-    client, token, user, session
-):
+async def test_list_todos_with_all_filters(client, token, user, session):
     expected_value = 5
     session.add_all(TodoFactory.create_batch(5, user_id=user.id, state='todo'))
     session.add_all(
@@ -161,7 +157,7 @@ async def test_list_todos_with_all_filters(
             user_id=user.id,
             state='doing',
             title='first task',
-            description='this is first task'
+            description='this is first task',
         )
     )
 
@@ -171,7 +167,7 @@ async def test_list_todos_with_all_filters(
     response = client.get(
         '/todos',
         headers={'Authorization': f'Bearer {token}'},
-        params={'title': 'first', 'description': 'first', 'state': 'doing'}
+        params={'title': 'first', 'description': 'first', 'state': 'doing'},
     )
 
     assert response.status_code == HTTPStatus.OK
