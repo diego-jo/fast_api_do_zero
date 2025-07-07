@@ -2,10 +2,10 @@ name: Todo Api
 on:
     push:
         branches: ['main']
-        paths: ['aula01-11']
+        paths: ['aula01-11', '.github/workflows']
     pull_request:
         types: [opened]
-        paths: ['aula01-11']
+        paths: ['aula01-11', '.github/workflows']
 
 jobs:
   test:
@@ -36,4 +36,3 @@ jobs:
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ALGORITHM: ${{secrets.ALGORITHM}}
       TOKEN_TIME_EXPIRATION_SECS: ${{secrets.TOKEN_TIME_EXPIRATION_SECS}}
-p
