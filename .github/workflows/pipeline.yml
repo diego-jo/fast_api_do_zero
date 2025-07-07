@@ -2,10 +2,8 @@ name: Todo Api
 on:
     push:
         branches: ['main']
-        paths: ['aula01-11', '.github/workflows']
     pull_request:
         types: [opened]
-        paths: ['aula01-11', '.github/workflows']
 
 jobs:
   test:
