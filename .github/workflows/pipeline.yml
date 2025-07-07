@@ -9,7 +9,7 @@ jobs:
   test:
     defaults:
         run:
-            working-directory: ./aula01-11
+            working-directory: ./aula01-11/fast_zero
     runs-on: ubuntu-latest
     steps:
       - name: Copia os arquivos do repositório
