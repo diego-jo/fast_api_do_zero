@@ -90,3 +90,4 @@
     - separar criação de `engine` da `session` e mudar fixture da engine para escopo de sessao
 
 - [x] aula 12 adicionar fluxo de testes automatizados com CI via GH Actions
+  - [x] inserir secrets no github
